@@ -14,7 +14,7 @@
 
         @endif
 
-        {!! Form::open(['url'=>'categories']) !!}
+         {!! Form::open(['route'=>'categories.store', 'method'=>'post']) !!}
 
         <div class="form-group">
 
@@ -27,9 +27,8 @@
         </div>
 
         <div class="form-group">
-
             {!! Form::submit('Add Category', ['class'=>'btn btn-primary']) !!}
-
+            <a href="{{ route('categories') }}" class="btn btn-success">Voltar</a>
         </div>
 
         {!! Form::close() !!}
