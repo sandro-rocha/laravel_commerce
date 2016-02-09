@@ -38,6 +38,7 @@ $app->singleton(
 
 $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
+    CodeCommerce\Exceptions\WhoopsHandler::class,
     CodeCommerce\Exceptions\Handler::class
 );
 

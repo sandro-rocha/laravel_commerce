@@ -4,6 +4,32 @@
     <div class="container">
         <h1>Products</h1>
 
+        @if (session('product_exist'))
+            <div class="alert alert-danger">
+                {{ session('product_exist') }}
+            </div>
+        @endif
+        @if (session('product_destroy'))
+            <div class="alert alert-success">
+                {{ session('product_destroy') }}
+            </div>
+        @endif
+        @if (session('product_edit'))
+            <div class="alert alert-success">
+                {{ session('product_edit') }}
+            </div>
+        @endif
+        @if (session('product_update'))
+            <div class="alert alert-success">
+                {{ session('product_update') }}
+            </div>
+        @endif
+        @if (session('product_store'))
+            <div class="alert alert-success">
+                {{ session('product_store') }}
+            </div>
+        @endif
+
         <a href="{{ route('products.create') }}" class="btn btn-success">New Product</a>
         <br />  <br />
         <table class="table table-responsive table-striped table-hover table-condensed">

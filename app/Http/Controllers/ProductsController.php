@@ -5,6 +5,7 @@ use CodeCommerce\Category;
 use CodeCommerce\Http\Requests;
 use CodeCommerce\Product;
 use CodeCommerce\ProductImage;
+use CodeCommerce\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
@@ -35,9 +36,12 @@ class ProductsController extends Controller
 
     public function store(Requests\ProductRequest $request)
     {
-        $input = $request->all();
-        $product = $this->productModel->fill($input);
+        $product = $this->productModel->fill($request->all());
         $product->save();
+
+        $inputTags = array_map('trim', explode(',', $request->get('tags')));
+        $this->storeTag($inputTags,$product->id);
+
         return redirect()->route('products');
     }
 
@@ -53,13 +57,48 @@ class ProductsController extends Controller
     public function update(Requests\ProductRequest $request, $id)
     {
         $this->productModel->findOrNew($id)->update($request->all());
+
+        $input = array_map('trim', explode(',', $request->get('tags')));
+        $this->storeTag($input,$id);
+
         return redirect()->route('products');
     }
 
     public function destroy($id)
     {
-        $this->productModel->findOrNew($id)->delete();
-        return redirect()->route('products');
+        $product = $this->productModel->find($id);
+
+        if($product)
+        {
+            if($product->images)
+            {
+                foreach($product->images as $image){
+                    if(file_exists(public_path().'/uploads/'.$image->id.'.'.$image->extension))
+                    {
+                        Storage::disk('public_local')->delete($image->id.'.'.$image->extension);
+                    }
+                    $image->delete();
+                }
+            }
+            $product->delete();
+            return redirect()->route('products')->with('product_destroy', 'Product deleted!');
+        }
+        return redirect()->route('products')->with('product_exist', 'Product not exist!');
+    }
+
+    private function storeTag($inputTags, $id)
+    {
+        $tag = new Tag();
+
+        $countTags = count($inputTags);
+
+        foreach ($inputTags as $key => $value) {
+            $newTag = $tag->firstOrCreate(["name" => $value]);
+            $idTags[] = $newTag->id;
+        }
+        $product = $this->productModel->find($id);
+        $product->tags()->sync($idTags);
+
     }
 
     public function images($id)

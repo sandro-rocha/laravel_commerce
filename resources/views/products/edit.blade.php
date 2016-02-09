@@ -46,6 +46,11 @@
         </div>
 
         <div class="form-group">
+            {!! Form::label('tags', 'TAGs:') !!}
+            {!! Form::textarea('tags', $product->tagList, ['class'=>'form-control']) !!}
+        </div>
+
+        <div class="form-group">
             {!! Form::submit('Save Product', ['class'=>'btn btn-primary']) !!}
             <a href="{{ route('products') }}" class="btn btn-success">Voltar</a>
         </div>
