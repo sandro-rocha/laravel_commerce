@@ -39,10 +39,12 @@
 
         <div class="form-group">
             {!! Form::label('featured', 'Featured:') !!}
+            {!! Form::hidden('featured', 0) !!}
             {!! Form::checkbox('featured', 1, $product->featured) !!}
-            &nbsp;&nbsp;
-            {!! Form::label('recommended', 'Recommended:') !!}
-            {!! Form::checkbox('recommended', 1, $product->recommended) !!}
+
+            {!! Form::label('recommend', 'Recommend:') !!}
+            {!! Form::hidden('recommend', 0) !!}
+            {!! Form::checkbox('recommend', 1, $product->recommend) !!}
         </div>
 
         <div class="form-group">

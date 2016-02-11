@@ -1,8 +1,8 @@
 
-<div class="col-sm-3">
+<div class="col-sm-2">
     <div class="left-sidebar">
         <h2>Categorias</h2>
-        <div class="panel-group category-products" id="accordian"><!--category-productsr-->
+        <div class="panel-group category-products" id="accordian">
 
             @foreach($categories as $category)
             <div class="panel panel-default">
@@ -12,7 +12,7 @@
             </div>
             @endforeach
 
-        </div><!--/category-products-->
+        </div>
 
     </div>
 </div>

@@ -34,9 +34,10 @@ class StoreController extends Controller
     public function productCategory($id)
     {
         $pCategory = Product::ProductCategory($id)->get();
-
+        $category = $this->category->find($id);
+        
         $categories = Category::all();
 
-        return view('store.products_category', compact('categories','pCategory'));
+        return view('store.products_category', compact('categories','category','pCategory'));
     }
 }
