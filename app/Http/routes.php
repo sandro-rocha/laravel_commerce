@@ -11,7 +11,10 @@
 */
 Route::group(['prefix' => ''], function () {
     Route::get('/', ['as' => 'home', 'uses' => 'StoreController@index']);
-    Route::get('category/{id}', ['as' => 'store.products_category', 'uses' => 'StoreController@productCategory']);
+    Route::get('category/{id}', ['as' => 'store.category', 'uses' => 'StoreController@Category']);
+    Route::get('category/{id}', ['as' => 'store.category', 'uses' => 'StoreController@category']);
+    Route::get('product/{id}', ['as' => 'store.product', 'uses' => 'StoreController@product']);
+    Route::get('tag/{id}', ['as' => 'store.tag', 'uses' => 'StoreController@tag']);
 });
 
 Route::controllers([
