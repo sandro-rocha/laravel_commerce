@@ -31,7 +31,7 @@
             <div class="col-sm-7">
                 <div class="product-information"><!--/product-information-->
 
-                    <h2>{{$product->category->name}} :: {{$product->name}}</h2>
+                    <h2>{{$product->category->name}} : {{$product->name}}</h2>
 
                     <p>{{$product->description}}</p>
                                 <span>
@@ -45,7 +45,7 @@
                 <div class="col-sm-7">
                     Tags:
                     @foreach($product->tags as $tag)
-                        <a href="{{ route('store.tag', $tag->id) }}" class="btn btn-fefault cart">{{ $tag->name }}</a>
+                        <span class="label label-primary"><a style="color:#FFF" href="{{ route('store.tag', $tag->id) }}" class="">{{ $tag->name }}</a></span>
                     @endforeach
                 </div>
                 <!--/product-information-->
