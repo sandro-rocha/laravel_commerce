@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h1>Create Products</h1>
+        <h1>Create User</h1>
 
         @if($errors->any())
 
@@ -14,40 +14,32 @@
 
         @endif
 
-        {!! Form::open(['url'=>'products']) !!}
+        {!! Form::open(['url'=>'admin\users']) !!}
 
-        <div class="form-group">
-
-            {!! Form::label('category', 'Category:') !!}
-            {!! Form::select('category_id', $categories, null, ['class'=>'form-control']) !!}
-        </div>
         <div class="form-group">
 
             {!! Form::label('name', 'Name:') !!}
             {!! Form::text('name', null, ['class'=>'form-control']) !!}
         </div>
-        <div class="form-group">
-            {!! Form::label('description', 'Description:') !!}
-            {!! Form::textarea('description', null, ['class'=>'form-control']) !!}
-        </div>
-        <div class="form-group">
-            {!! Form::label('price', 'Price:') !!}
-            {!! Form::text('price', null, ['class'=>'form-control']) !!}
-        </div>
-        <div class="form-group">
-            {!! Form::label('featured', 'Featured:') !!}
-            {!! Form::select('featured', ['1' => 'True', '0' => 'False'], 0) !!}
-        </div>
-        <div class="form-group">
-            {!! Form::label('recommend', 'Recommend:') !!}
-            {!! Form::select('recommend', ['1' => 'True', '0' => 'False']) !!}
 
+        <div class="form-group">
+            {!! Form::label('email', 'Email:') !!}
+            {!! Form::text('email', null, ['class'=>'form-control']) !!}
+        </div>
 
-         </div>
+        <div class="form-group">
+            {!! Form::label('password', 'Password:') !!}
+            {!! Form::text('password',null, ['class'=>'form-control']) !!}
+        </div>
+
+        <div class="form-group">
+            {!! Form::label('is_admin', 'Permission:') !!}
+            {!! Form::select('is_admin', ['Usuário', 'Administrador']) !!}
+        </div>
 
          <div class="form-group">
 
-             {!! Form::submit('Add Product', ['class'=>'btn btn-primary']) !!}
+             {!! Form::submit('Add User', ['class'=>'btn btn-primary']) !!}
 
         </div>
 

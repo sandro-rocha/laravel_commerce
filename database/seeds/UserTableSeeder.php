@@ -19,10 +19,11 @@ class UserTableSeeder extends Seeder
             [
                 'name' => 'Sandro',
                 'email' => 'rochasandro378@gmail.com',
-                'password' => Hash::make(123)
+                'password' => Hash::make(123),
+                'is_admin' => 1
             ]
         );
 
-        factory('CodeCommerce\User', 10)->create();
+        //factory('CodeCommerce\User', 10)->create();
     }
 }

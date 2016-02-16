@@ -12,15 +12,22 @@ Route::group(['prefix' => ''], function () {
     Route::post('cart/update/{id}', ['as' => 'cart.update', 'uses' => 'CartController@update']);
 });
 
+// Usuário autenticado
+Route::group(['middleware'=>'auth'], function() {
+    Route::get('checkout/placeOrder', ['as' => 'checkout.place', 'uses' => 'CheckoutController@place']);
+    Route::get('account/orders', ['as' => 'account.orders', 'uses' => 'AccountController@orders']);
+});
+
 Route::controllers([
     'auth' => 'Auth\AuthController',
     'password' => 'Auth\PasswordController',
+    'test' => 'TestController'
 ]);
 
 Route::get('exemplo', 'WelcomeController@exemplo');
 Route::get('home', 'HomeController@index');
 
-Route::group(['prefix' => 'admin', 'where' => ['id' => '[0-9]+']], function() {
+Route::group(['prefix' => 'admin', 'middleware'=>'auth_admin', 'where' => ['id' => '[0-9]+']], function() {
     Route::group(['prefix' => 'categories'], function() {
         Route::get('', ['as' => 'categories', 'uses' => 'CategoriesController@index']);
         Route::post('', ['as' => 'categories.store', 'uses' => 'CategoriesController@store']);

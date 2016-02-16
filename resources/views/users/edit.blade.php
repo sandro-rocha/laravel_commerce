@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h1>Edit Product: {{ $product->name }}</h1>
+        <h1>Edit User: {{ $user->name }}</h1>
 
         @if($errors->any())
 
@@ -14,37 +14,30 @@
 
         @endif
 
-        {!! Form::open(['route'=>['products.update', $product->id], 'method'=>'put']) !!}
+        {!! Form::open(['route'=>['users.update', $user->id], 'method'=>'put']) !!}
 
         <div class="form-group">
 
-            {!! Form::label('category', 'Category:') !!}
-            {!! Form::select('category_id', $categories, $product->category->id, ['class'=>'form-control']) !!}
-        </div>
-        <div class="form-group">
             {!! Form::label('name', 'Name:') !!}
-            {!! Form::text('name', $product->name, ['class'=>'form-control']) !!}
+            {!! Form::text('name', $user->name, ['class'=>'form-control']) !!}
         </div>
         <div class="form-group">
-            {!! Form::label('description', 'Description:') !!}
-            {!! Form::textarea('description', $product->description, ['class'=>'form-control']) !!}
+            {!! Form::label('email', 'Email:') !!}
+            {!! Form::text('email', $user->email, ['class'=>'form-control']) !!}
         </div>
         <div class="form-group">
-            {!! Form::label('price', 'Price:') !!}
-            {!! Form::text('price', $product->price, ['class'=>'form-control']) !!}
+            {!! Form::label('password', 'Password:') !!}
+            {!! Form::text('password', $user->password, ['class'=>'form-control']) !!}
         </div>
+
         <div class="form-group">
-            {!! Form::label('featured', 'Featured:') !!}
-            {!! Form::select('featured', ['1' => 'True', '0' => 'False'], $product->featured) !!}
-        </div>
-        <div class="form-group">
-            {!! Form::label('recommend', 'Recommend:') !!}
-            {!! Form::select('recommend', ['1' => 'True', '0' => 'False'], $product->featured) !!}
+            {!! Form::label('is_admin', 'Permission:') !!}
+            {!! Form::select('is_admin', ['1' => 'Administrador', '0' => 'Usuário'], $user->id, ['class'=>'form-control']) !!}
         </div>
 
         <div class="form-group">
 
-            {!! Form::submit('Save Product', ['class'=>'btn btn-primary']) !!}
+            {!! Form::submit('Save User', ['class'=>'btn btn-primary']) !!}
 
         </div>
 

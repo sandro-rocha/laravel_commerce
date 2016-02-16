@@ -11,6 +11,7 @@
                 <th>ID</th>
                 <th>Name</th>
                 <th>Email</th>
+                <th>Permissão</th>
                 <th>Action</th>
             </tr>
 
@@ -19,6 +20,7 @@
                 <td>{{ $user->id }}</td>
                 <td>{{ $user->name }}</td>
                 <td>{{ $user->email }}</td>
+                <td>{{ $user->is_admin == 0 ? 'Usuário' : 'Administrador' }}</td>
                 <td>
                     <a href="{{ route('users.edit', ['id' => $user->id]) }}">Edit</a> |
                     <a href="{{ route('users.destroy', ['id' => $user->id]) }}">Delete</a>
