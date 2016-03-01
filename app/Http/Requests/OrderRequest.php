@@ -1,10 +1,8 @@
 <?php
-
 namespace CodeCommerce\Http\Requests;
-
 use CodeCommerce\Http\Requests\Request;
-
-class ProductRequest extends Request
+use Illuminate\Contracts\Validation\Validator;
+class OrderRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -15,7 +13,16 @@ class ProductRequest extends Request
     {
         return true;
     }
-
+    /**
+     * {@inheritdoc}
+     */
+    protected function formatErrors(Validator $validator)
+    {
+        $messages = [
+            'required' => 'Por favor preencha todos os campos.',
+        ];
+        return $validator->errors()->all($messages);
+    }
     /**
      * Get the validation rules that apply to the request.
      *
@@ -24,10 +31,7 @@ class ProductRequest extends Request
     public function rules()
     {
         return [
-            'category_id' => 'required',
-            'name' => 'required|min:4',
-            'description' => 'required',
-            'price' => 'required|numeric|min:2',
+            'status' => 'required'
         ];
     }
 }

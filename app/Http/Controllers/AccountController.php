@@ -2,23 +2,75 @@
 
 namespace CodeCommerce\Http\Controllers;
 
-use Illuminate\Http\Request;
-
+use CodeCommerce\Address;
 use CodeCommerce\Http\Requests;
-use CodeCommerce\Http\Controllers\Controller;
+use CodeCommerce\Order;
+use CodeCommerce\User;
 use Illuminate\Support\Facades\Auth;
 
 class AccountController extends Controller
 {
+    private $user;
+    private $order;
+    function __construct(Order $order, User $user)
+    {
+        $this->order = $order;
+        $this->user = $user;
+    }
     public function index()
     {
-
+        $orders = Auth::user()->orders;
+        $users = $this->user->all();
+        return view('store.account.home', compact('orders', 'users'));
     }
-
     public function orders()
     {
-        $orders = Auth::user()->orders;
+        $orders = Auth::user()->orders()->paginate(10);
+        return view('store.account.orders', compact('orders'));
+    }
+    public function address()
+    {
+        $address = Auth::user()->address;
+        //dd($address);
+        return view('store.account.address', compact('address'));
+    }
+    public function addressnew()
+    {
+        $address = Auth::user()->address;
+        return view('store.account.addressnew', compact('address'));
+    }
+    public function registerAddress(Requests\AddressRequest $addressRequest)
+    {
+        $data = $addressRequest->all();
+        Address::create($data);
+        return redirect()->route('account_address');
+    }
+    public function edit($id)
+    {
+        $address = Address::find($id);
+        return view('store.account.addressedit', compact('address'));
+    }
+    public function update(Requests\AddressRequest $addressRequest, $id)
+    {
+        Address::find($id)->update($addressRequest->all());
+        return redirect()->route('account_address');
+    }
+    public function destroy($id)
+    {
+        Address::findOrNew($id)->delete();
+        return redirect()->route('account_address');
+    }
 
-        return view('store.orders', compact('orders'));
+    public function perfil($id)
+    {
+        $user = Auth::user()->find($id);
+        return view('store.account.perfil', compact('user'));
+    }
+
+    public function perfilUpdate(Requests\PerfilRequest $perfilRequest, $id)
+    {
+        Auth::user()->find($id)->update($perfilRequest->all());
+
+        return redirect()->route('account')->with('account_perfil_success', 'Dados do perfil atualizado!');
     }
 }

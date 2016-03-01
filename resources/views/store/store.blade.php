@@ -51,19 +51,19 @@
                 <div class="col-sm-8">
                     <div class="shop-menu pull-right">
                         <ul class="nav navbar-nav">
-                            <li><a href="{{ route('account.orders') }}"><i class="fa fa-user"></i> Minha conta</a></li>
-                            <li><a href="http://commerce.dev:10088/checkout"><i class="fa fa-crosshairs"></i> Checkout</a></li>
                             <li><a href="{{ route('cart') }}"><i class="fa fa-shopping-cart"></i> Carrinho</a></li>
                             @if (Auth::guest())
                                 <li><a href="/auth/login"><i class="fa fa-lock"></i> Login</a></li>
+                                <li><a href="{{ url('/auth/register') }}">Registrar</a></li>
                             @else
+                                <li><a href="{{ route('account') }}"><i class="fa fa-user"></i> Minha conta</a></li>
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menu"
                                        aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>
                                     <ul class="dropdown-menu" role="menu">
-                                        <li><a href="#">Perfil</a></li>
+                                        <li><a href="{{ route('account_perfil', ['id' => \Illuminate\Support\Facades\Auth::user()->id]) }}">Perfil</a></li>
                                         <br />
-                                        <li><a href="{{ url('/auth/logout') }}">Logout</a></li>
+                                        <li><a href="{{ url('/auth/logout') }}">Sair</a></li>
                                     </ul>
                                 </li>
                             @endif
@@ -121,16 +121,10 @@
 
             @yield('categories')
 
+            @yield('data_user')
+
             @yield('content')
 
-        </div>
-    </div>
-    <div class="common-modal modal fade" id="common-Modal1" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-content">
-            <ul class="list-inline item-details">
-                <li><a href="http://themifycloud.com">ThemifyCloud</a></li>
-                <li><a href="http://themescloud.org">ThemesCloud</a></li>
-            </ul>
         </div>
     </div>
 </section>

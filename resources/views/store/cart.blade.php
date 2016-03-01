@@ -4,8 +4,8 @@
     <section id="cart_items">
         <div class="container">
             @if($cart->getTotal() == 0)
-                <div class="alert alert-warning" style="margin-bottom: 50px">
-                    Nenhum produto cadastrado.
+                <div class="alert alert-info" style="margin-bottom: 50px">
+                    Nenhum produto no carrinho de compras.
                 </div>
             @else
                 <div class="table-condensed cart_info">
@@ -24,10 +24,16 @@
                         <tbody>
                         @forelse($cart->all() as $k=>$item)
                             <tr>
-                                <td class="cart_product">
-                                    <a href="{{ route('store.product', ['id'=>$k]) }}">
-                                        Imegem
-                                    </a>
+                                <td class="cart_product" style="margin-right: 8px">
+                                    @if(isset($item['image']) === 'no-img'))
+                                        <a href="{{ route('store.product', ['id'=>$k]) }}">
+                                            <img src="{{ url('uploads/'.$item['image'].'.'.$item['extension']) }}" alt="" width="40px" />
+                                        </a>
+                                    @else
+                                        <a href="{{ route('store.product', ['id'=>$k]) }}">
+                                            <img src="{{ url('images/no-img.jpg') }}" alt="" width="60px" />
+                                        </a>
+                                    @endif
                                 </td>
                                 <td class="cart_description">
                                     <h4><a href="{{ route('store.product', ['id'=>$k]) }}">{{ $item['name'] }}</a></h4>
@@ -42,7 +48,7 @@
                                     <div class="form-group">
                                         {!! Form::text('qtd', $item['qtd'], ['class' => 'form-control']) !!}
                                     </div>
-                                    {!! Form::submit('Alterar Qtd', ['class' => 'btn btn-success']) !!}
+                                    {!! Form::submit('Qtd', ['class' => 'btn btn-success']) !!}
                                     {!! Form::close() !!}
                                 </td>
                                 <td class="cart_total">
@@ -63,7 +69,7 @@
                         <tr class="cart_menu">
                             <td colspan="6">
                                 <div class="pull-right">
-                                    <span style="margin-right: 40px">
+                                    <span style="margin-right: 30px">
                                         TOTAL: R$ {{ number_format($cart->getTotal(),2,",",".") }}
                                     </span>
                                     <a href="{{ route('checkout.place') }}" class="btn btn-success">Finalizar Compra</a>

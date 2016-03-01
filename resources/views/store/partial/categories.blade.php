@@ -1,4 +1,3 @@
-
 <div class="col-sm-2">
     <div class="left-sidebar">
         <h2>Categorias</h2>

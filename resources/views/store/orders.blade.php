@@ -1,10 +1,16 @@
 @extends('store.store')
 
 @section('content')
-    <div class="col-sm-9 padding-right">
+    <div class="col-sm-12 padding-right">
         <div class="product-details"><!--product-details-->
-            <h3>Meus pedidos</h3>
 
+            @if(count($orders) < 1)
+                <div class="alert alert-info">
+                    Nenhum pedido cadastrado em sua conta.
+                </div>
+            @else
+
+            <h3>Meus pedidos</h3>
             <table class="table">
                 <tbody>
                 <tr>
@@ -31,6 +37,7 @@
 
                 </tbody>
             </table>
+            @endif
         </div>
     </div>
 @stop
