@@ -34,7 +34,7 @@ class AddressRequest extends Request
     {
         return [
             'reference' => 'required',
-            'zip_code' => 'required',
+            'zip_code' => 'required|integer',
             'street' => 'required',
             'number' => 'required',
             'complement' => 'required',

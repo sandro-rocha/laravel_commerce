@@ -5,7 +5,6 @@ namespace CodeCommerce\Http\Controllers\Auth;
 use CodeCommerce\User;
 use Validator;
 use CodeCommerce\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 
 class AuthController extends Controller
@@ -21,7 +20,7 @@ class AuthController extends Controller
     |
     */
 
-    use AuthenticatesAndRegistersUsers, ThrottlesLogins;
+    use AuthenticatesAndRegistersUsers;
 
     /**
      * Create a new authentication controller instance.

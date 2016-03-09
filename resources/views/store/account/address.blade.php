@@ -21,7 +21,7 @@
                     <th>CEP</th>
                     <th>Estado</th>
                     <th>País</th>
-                    <th>Ação</th>
+                    <th>Opção</th>
                 </tr>
                 @forelse($address as $addr)
                 <tr>
@@ -30,7 +30,7 @@
                     <td>{{ $addr->zip_code }}</td>
                     <td>{{ $addr->state }}</td>
                     <td>{{ $addr->country }}</td>
-                    <td><a href="{{ route('account_address_edit', ['id' => $addr->id]) }}" title="Editar" class="btn btn-sm btn-success">Atualizar</a>
+                    <td><a href="{{ route('account_address_edit', ['id' => $addr->id]) }}" title="Editar" class="btn btn-sm btn-success">Alterar</a>
                     <a href="{{ route('account_address_destroy', ['id' => $addr->id]) }}" class="btn btn-sm btn-danger">Delete</a>
                     </td>
                 </tr>

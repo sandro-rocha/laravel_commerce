@@ -8,28 +8,20 @@
 
             <ul class="alert alert-danger">
                 @foreach($errors->all() as $error)
-                <li style="margin-left: 20px>{{ $error }}</li>
+                <li style="margin-left: 20px">{{ $error }}</li>
                 @endforeach
             </ul>
 
         @endif
 
-        {!! Form::open(['route'=>'categories', 'method'=>'post']) !!}
+        {!! Form::open(['url'=>'admin\categories']) !!}
 
-        <div class="form-group">
-
-            {!! Form::label('name', 'Name:') !!}
-            {!! Form::text('name', null, ['class'=>'form-control']) !!}
-            <br />
-            {!! Form::label('description', 'Description:') !!}
-            {!! Form::textarea('description', null, ['class'=>'form-control']) !!}
-
-        </div>
+        @include('categories._form')
 
         <div class="form-group">
 
             {!! Form::submit('Add Category', ['class'=>'btn btn-primary']) !!}
-            <a href="{{ route('categories') }}" class="btn btn-success">Voltar</a>
+            <a href="{{ route('categories') }}" class="btn btn-default">Voltar</a>
 
         </div>
 

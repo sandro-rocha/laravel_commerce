@@ -37,10 +37,14 @@ Route::group(['prefix' => 'account', 'middleware'=>'auth', 'where' => ['id' => '
 //Route::get('exemplo', 'WelcomeController@exemplo');
 Route::get('home', 'HomeController@index');
 
+Route::get('test', 'CheckoutController@test');
+
 Route::get('evento', function() {
    // \Illuminate\Support\Facades\Event::fire(new CodeCommerce\Events\CheckoutEvent());
     event(new CodeCommerce\Events\CheckoutEvent());
 });
+
+Route::post('payment_status', ['as' => 'payment_status', 'uses' => 'CheckoutController@payment_status']);
 
 Route::group(['prefix' => 'admin', 'middleware'=>'auth_admin', 'where' => ['id' => '[0-9]+']], function() {
     Route::get('', ['as' => 'admin', 'uses' => 'CategoriesController@index']);

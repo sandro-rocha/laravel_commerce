@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use CodeCommerce\Http\Requests;
 use CodeCommerce\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
@@ -35,7 +36,7 @@ class UsersController extends Controller
      */
     public function create()
     {
-        //
+        return view('users.create');
     }
 
     /**
@@ -46,18 +47,13 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $input = $request->all();
+        $input['password'] = Hash::make($input['password']);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function show($id)
-    {
-        //
+        $user = $this->userModel->fill($input);
+        $user->save();
+
+        return redirect()->route('users');
     }
 
     /**
@@ -68,7 +64,8 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = $this->userModel->find($id);
+        return view('users.edit', compact('user'));
     }
 
     /**
@@ -81,9 +78,14 @@ class UsersController extends Controller
     public function update(Request $request, $id)
     {
         $input = $request->all();
-        $input['password'] = Hash::make($input['password']);
-        $this->userModel->findOrNew($id)->update($input);
-        
+
+        if ($input['password'] == null) {
+            $this->userModel->findOrNew($id)->update($input['name'],$input['email']);
+        }else{
+            $input['password'] = Hash::make($input['password']);
+            $this->userModel->findOrNew($id)->update($input);
+        }
+
         return redirect()->route('users');
     }
 
@@ -95,6 +97,7 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->userModel->findOrNew($id)->delete();
+        return redirect()->route('users');
     }
 }

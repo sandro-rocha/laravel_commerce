@@ -1,7 +1,7 @@
 @extends('store.store')
 
 @section('content')
-    <div class="col-sm-12 padding-right">
+    <div class="col-sm-10 padding-right">
         <div class="product-details"><!--product-details-->
 
             @if(count($orders) < 1)

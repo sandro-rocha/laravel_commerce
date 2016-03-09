@@ -9,8 +9,8 @@
             </div>
         @endif
         <div class="jumbotron">
-            <h3>Olá, {{ Auth::user()->name }}, Seja bem vindo à sua conta!</h3>
-            <p>Aproveite nossa promoções</p>
+            <h3>Olá, {{ Auth::user()->name }}, Seja bem vindo à sua conta !!!</h3>
+            <p>Aproveite nossas ofertas e promoções !!!</p>
          </div>
     </div>
 @stop

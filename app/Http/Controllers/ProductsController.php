@@ -1,12 +1,13 @@
 <?php
+
 namespace CodeCommerce\Http\Controllers;
+;
 
 use CodeCommerce\Category;
 use CodeCommerce\Http\Requests;
 use CodeCommerce\Product;
 use CodeCommerce\ProductImage;
 use CodeCommerce\Tag;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 
@@ -16,13 +17,13 @@ class ProductsController extends Controller
 
     public function __construct(Product $productModel)
     {
-        // $this->middleware('auth'); - verifica se o usuário esta logado
+        // $this->middleware('auth'); - verifica se o usuario esta logado
         $this->productModel = $productModel;
     }
 
     public function index()
     {
-        $products = $this->productModel->paginate(10);
+        $products = $this->productModel->orderBy('id', 'DESC')->paginate(10);
 
         return view('products.index', compact('products'));
     }
@@ -32,7 +33,6 @@ class ProductsController extends Controller
         $categories = $category->lists('name', 'id');
 
         return view('products.create', compact('categories'));
-
     }
 
     public function store(Requests\ProductRequest $request)
@@ -43,7 +43,7 @@ class ProductsController extends Controller
         $inputTags = array_map('trim', explode(',', $request->get('tags')));
         $this->storeTag($inputTags,$product->id);
 
-        return redirect()->route('products');
+        return redirect()->route('products')->with('product_store', 'Product create!');
     }
 
     public function edit($id, Category $category)
@@ -51,7 +51,6 @@ class ProductsController extends Controller
         $categories = $category->lists('name', 'id');
 
         $product = $this->productModel->find($id);
-
         return view('products.edit', compact('product', 'categories'));
     }
 
@@ -62,7 +61,7 @@ class ProductsController extends Controller
         $input = array_map('trim', explode(',', $request->get('tags')));
         $this->storeTag($input,$id);
 
-        return redirect()->route('products');
+        return redirect()->route('products')->with('product_update', 'Product updated!');
     }
 
     public function destroy($id)
@@ -91,8 +90,6 @@ class ProductsController extends Controller
     {
         $tag = new Tag();
 
-        $countTags = count($inputTags);
-
         foreach ($inputTags as $key => $value) {
             $newTag = $tag->firstOrCreate(["name" => $value]);
             $idTags[] = $newTag->id;
@@ -105,7 +102,6 @@ class ProductsController extends Controller
     public function images($id)
     {
         $product = $this->productModel->find($id);
-
         return view('products.images', compact('product'));
     }
 

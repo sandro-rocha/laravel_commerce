@@ -1,5 +1,4 @@
 <?php
-
 namespace CodeCommerce\Http\Controllers;
 
 use CodeCommerce\Category;
@@ -8,8 +7,10 @@ use CodeCommerce\Http\Requests;
 use CodeCommerce\Order;
 use CodeCommerce\OrderItem;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
+use PHPSC\PagSeguro\Items\Item;
+use PHPSC\PagSeguro\Requests\Checkout\CheckoutService;
+
 
 class CheckoutController extends Controller
 {
@@ -17,7 +18,8 @@ class CheckoutController extends Controller
     {
         //$this->middleware('auth_admin');
     }
-    public function place(Order $orderModel, OrderItem $orderItem)
+
+    public function place(Order $orderModel, OrderItem $orderItem, CheckoutService $checkoutService)
     {
         if (!Session::has('cart')) {
             return false;
@@ -28,18 +30,103 @@ class CheckoutController extends Controller
             return redirect()->route('account_address')->with('address_exist', 'Você precisa ter um endereço de entrega antes de finalizar compra!');
         }
         if ($cart->getTotal() > 0) {
+
+            $checkout = $checkoutService->createCheckoutBuilder();
+
             $order = $orderModel->create(['user_id' => Auth::user()->id, 'total' => $cart->getTotal()]);
+
             foreach ($cart->all() as $k => $item) {
+
+                $checkout->addItem(new Item($k, $item['name'], number_format($item['price'], 2,'.',''), $item['qtd']));
                 $order->items()->create([
                     'product_id' => $k,
                     'price' => $item['price'],
                     'qtd' => $item['qtd']
                 ]);
             }
+            // VER CONFIGURAÇÃO DE EMAIL
+            // dd(Config::get('mail'));
             $cart->clear();
             event(new CheckoutEvent(Auth::user(), $order));
-            return view('store.checkout', compact('order', 'categories'));
+
+            $response = $checkoutService->checkout($checkout->getCheckout());
+
+            // retorna para pagina interna do codecommerce
+            //return view('store.checkout', compact('order', 'categories'));
+            // retorna para pagina do pagseguro
+            return redirect($response->getRedirectionUrl());
         }
         return view('store.checkout', ['cart' => 'empty', 'categories' => $categories]);
+    }
+
+    public function test(CheckoutService $checkoutService)
+    {
+        $checkout = $checkoutService->createCheckoutBuilder()
+            ->addItem(new Item(1, 'Televisão LED 500', 8999.99))
+            ->addItem(new Item(2, 'Video-game mega ultra blaster', 799.99))
+            ->getCheckout();
+
+        $response = $checkoutService->checkout($checkout);
+
+        return redirect($response->getRedirectionUrl());
+    }
+
+    public function payment_status(Request $request)
+    {
+        if ($request->get('notificationType') == 'transaction')
+        {
+            $url = 'https://ws.sandbox.pagseguro.uol.com.br/v3/transactions/notifications/' . $request->get('notificationCode') . '?email=' . config('pagseguro.email') . '&token=' . config('pagseguro.token');
+
+            $curl = curl_init($url);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            $transaction = curl_exec($curl);
+            curl_close($curl);
+
+            if ($transaction == 'Unauthorized')
+            {
+                //MSG de ERRO!
+                exit();
+            }
+
+            $transaction = simplexml_load_string($transaction);
+
+            switch ($transaction->status)
+            {
+                case 1:
+                    $code = 2;
+                    break; //Aguardando pagamento
+                case 2:
+                    $code = 2;
+                    break; //Em análise
+                case 3:
+                    $code = 3;
+                    break; //Paga
+                case 4:
+                    $code = 3;
+                    break; //Disponível
+                case 5:
+                    $code = 1;
+                    break; //Em disputa
+                case 6:
+                    $code = 6;
+                    break; //Devolvida
+                case 7:
+                    $code = 6;
+                    break; //Cancelada
+                case 8:
+                    $code = 6;
+                    break; //Chargeback debitado
+                case 9:
+                    $code = 6;
+                    break; //Em contestação
+                default:
+                    $code = 1;
+            }
+
+            $order = Order::where('id', $transaction->reference)->firstOrFail();
+
+            $order->update(['stat_id' => $code, 'code_pagseguro' => $transaction->code]);
+        }
     }
 }
