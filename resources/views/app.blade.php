@@ -38,7 +38,7 @@
                 	<li><a href="{{ route('users') }}" title="Users">Users</a></li>
                 	<li><a href="{{ route('categories') }}" title="Categories">Categories</a></li>
                 	<li><a href="{{ route('products') }}" title="Product">Product</a></li>
-                	<li><a href="{{ route('orders') }}" title="Ordens" >Ordens</a></li>
+                	<li><a href="{{ route('orders') }}" title="Ordens" >Orders</a></li>
 				</ul>
 
 				<ul class="nav navbar-nav navbar-right">
